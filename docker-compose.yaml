@@ -112,7 +112,7 @@ services:
     command: node dist/src/harness.js --start-docker
     # Resource limits for Docker Compose (not Swarm)
     # Increase if you have more CPU cores/RAM available
-    cpus: 4.0
+    cpus: 2.0
     mem_limit: 8G
     memswap_limit: 8G
 
@@ -128,6 +128,7 @@ services:
     networks:
       - backend
     command: redis-server --bind 0.0.0.0
+    cpus: 2.0
     logging:
       driver: "json-file"
       options:
@@ -140,6 +141,7 @@ services:
     networks:
       - backend
     command: rabbitmq-server
+    cpus: 2.0
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "-q", "check_running"]
       interval: 5s
@@ -166,6 +168,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-postgres}
     networks:
       - backend
+    cpus: 2.0
     logging:
       driver: "json-file"
       options:
