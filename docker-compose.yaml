@@ -88,6 +88,9 @@ services:
 
   api:
     <<: *common-service
+    networks:
+      - backend
+      - dokploy-network
     environment:
       <<: *common-env
       HOST: "0.0.0.0"
@@ -119,6 +122,8 @@ services:
     # Using Valkey with Firecrawl is untested and not guaranteed to work. Use with caution.
     image: redis:alpine
     # image: valkey/valkey:alpine
+    volumes:
+      - ../files/firecrawl_redis:/data
 
     networks:
       - backend
@@ -153,6 +158,8 @@ services:
     # comment out the build: statement and uncomment the image: statement
     # image: ghcr.io/firecrawl/nuq-postgres:latest
     build: apps/nuq-postgres
+    volumes:
+      - ../files/firecrawl_db:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
@@ -169,3 +176,5 @@ services:
 networks:
   backend:
     driver: bridge
+  dokploy-network:
+    external: true
